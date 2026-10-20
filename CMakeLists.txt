@@ -585,6 +585,17 @@ ${TENSORRT_BUILDER_RESOURCE_LIB})
 
 add_test(NAME stereo_geometry_check COMMAND stereo_geometry_check)
 
+add_executable(settings_rectification_check tests/settings_rectification_check.cc)
+
+set_target_properties(settings_rectification_check PROPERTIES
+BUILD_RPATH "${PROJECT_RUNTIME_RPATH}")
+
+target_link_libraries(settings_rectification_check xplslam)
+
+add_test(NAME settings_rectification_check
+         COMMAND settings_rectification_check
+                 ${PROJECT_SOURCE_DIR}/config/new_college.yaml)
+
 add_executable(xplnet_endpoint_covariance_check
 tests/xplnet_endpoint_covariance_check.cc)
 
@@ -623,6 +634,15 @@ if(XPLSLAM_WITH_MAP_SPARSIFICATION)
     xplslam)
 
     add_test(NAME map_sparsification_check COMMAND map_sparsification_check)
+endif()
+
+find_package(Python3 3.10 COMPONENTS Interpreter QUIET)
+if(Python3_Interpreter_FOUND)
+    add_test(NAME new_college_bag_stream_check
+             COMMAND ${Python3_EXECUTABLE}
+                     ${PROJECT_SOURCE_DIR}/tests/new_college_bag_stream_check.py)
+    set_tests_properties(new_college_bag_stream_check PROPERTIES
+                         SKIP_RETURN_CODE 77)
 endif()
 
 # Keep assertions active in Release tests and separate our suite from tests

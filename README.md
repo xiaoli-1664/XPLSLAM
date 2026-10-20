@@ -57,24 +57,49 @@ Optional switches:
 
 ## NewCollege example
 
-Prepare the NewCollege images and timestamps in this layout:
+The example reads the original **ROS1 `.bag` directly**. No image extraction,
+timestamp CSV, ROS installation, or `roscore` is required. Install the Python
+3.10+ bag reader:
 
-```text
-new_college/
-├── all_camera_images/
-│   ├── cam0/
-│   ├── cam1/
-│   ├── cam3/
-│   └── cam4/
-└── all_camera_info/
-    └── cam.txt
+```bash
+python3 -m pip install -r examples/requirements.txt
 ```
 
-Images are sorted by filename and paired by index across cameras. `cam.txt`
-contains timestamps in seconds, either one per line or comma-separated with
-a header containing `cam0`. The supplied configuration uses cameras
-`cam0`, `cam1`, `cam3`, and `cam4`, in that order. Verify that the images and
-calibration match `config/new_college.yaml`.
+The C++ example starts `examples/new_college_bag_stream.py`, which reads and
+synchronizes the compressed image messages in memory. Camera topics are set
+in `config/new_college.yaml`:
+
+| Camera | Bag topic |
+| --- | --- |
+| Camera0 | `/alphasense_driver_ros/cam0/compressed` |
+| Camera1 | `/alphasense_driver_ros/cam1/compressed` |
+| Camera2 | `/alphasense_driver_ros/cam3/compressed` |
+| Camera3 | `/alphasense_driver_ros/cam4/compressed` |
+
+Frames are synchronized using the message **header timestamps**, with a
+maximum four-camera span of 20,000 ns by default (`--sync-tolerance-ns`).
+Unmatched older images are discarded; `--start`, `--step`, and `--max-frames`
+apply to synchronized frame groups. JPEG and PNG `sensor_msgs/CompressedImage`
+messages are supported.
+
+The supplied calibration contains the original NewCollege camera intrinsics,
+equidistant distortion coefficients, and `CameraN.rectified_intrinsics`
+(`fx, fy, cx, cy`) for the output pinhole images. These preserve the field of
+view of fisheye undistortion with `balance=0`. XPLSLAM undistorts the raw bag
+images at runtime. Use calibration matching your recording; the previous
+calibration for already-undistorted extracted images is not suitable for raw
+bag input.
+
+Check bag reading and decoding before loading models or starting SLAM:
+
+```bash
+./build/xplslam_new_college \
+  --bag /path/to/new_college.bag \
+  --check-data-only --max-frames 100
+```
+
+This check does not require a GPU device, models, or vocabularies. Use
+`--python /path/to/python` if `rosbags` is installed in a different environment.
 
 The model weights and vocabularies are not included in this source release.
 Provide these runtime assets separately:
@@ -96,7 +121,7 @@ Run from the repository root:
 
 ```bash
 ./build/xplslam_new_college \
-  --dataset /path/to/new_college \
+  --bag /path/to/new_college.bag \
   --settings config/new_college.yaml \
   --point-vocab vocabulary/point_voc.dbow3bin \
   --line-vocab vocabulary/line_voc.dbow3bin \
@@ -104,7 +129,10 @@ Run from the repository root:
 ```
 
 Add `--viewer` to display tracking and the map, or `--max-frames 300` for a
-short run. Use `--help` for all options. The trajectory is written to
+short run. Input runs as fast as possible by default; `--realtime` follows bag
+timestamps and is enabled automatically with `--viewer` unless
+`--no-realtime` is supplied. Use `--runtime-timing` for buffered runtime logs,
+and `--help` for all options. The trajectory is written to
 `output/new_college/trajectory_tum.txt`; TensorRT engine caches are generated
 under `output/` on the first run. Clear the relevant engine caches after
 changing models, input dimensions, or GPU/TensorRT versions.

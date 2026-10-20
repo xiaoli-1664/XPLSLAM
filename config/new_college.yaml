@@ -1,16 +1,21 @@
 %YAML:1.0
 ---
 
+# Raw NewCollege ROS1 bag calibration, before fisheye undistortion.
+# Camera order: cam0, cam1, cam3, cam4.
 Camera.nCams: 4
 
-Camera0.fx: 272.21046254385396
-Camera0.fy: 273.6225226337552
-Camera0.cx: 357.5346139071073
-Camera0.cy: 255.4255477338687
+Camera0.topic: "/alphasense_driver_ros/cam0/compressed"
+Camera0.fx: 352.779
+Camera0.fy: 354.609
+Camera0.cx: 359.035
+Camera0.cy: 260.546
 Camera0.width: 720
 Camera0.height: 540
-Camera0.distortion_model: radtan
-Camera0.distortion_parameters: [0.0, 0.0, 0.0, 0.0]
+Camera0.distortion_model: equidistant
+Camera0.distortion_parameters: [-0.04217, -0.00413, 0.00179, -0.00063]
+# Output pinhole intrinsics from fisheye undistortion with balance=0.
+Camera0.rectified_intrinsics: [272.21046254385396, 273.6225226337552, 357.5346139071073, 255.4255477338687]
 Camera0.Tbc: !!opencv-matrix
   rows: 4
   cols: 4
@@ -20,14 +25,16 @@ Camera0.Tbc: !!opencv-matrix
          -0.006016277759232101, 0.9999813755600538, 0.001026126184214555, -0.009399568563035594,
          0.0, 0.0, 0.0, 1.0]
 
-Camera1.fx: 272.0403093936102
-Camera1.fy: 273.56048426697254
-Camera1.cx: 369.85391839518536
-Camera1.cy: 296.9930316232198
+Camera1.topic: "/alphasense_driver_ros/cam1/compressed"
+Camera1.fx: 352.538
+Camera1.fy: 354.508
+Camera1.cx: 363.856
+Camera1.cy: 287.494
 Camera1.width: 720
 Camera1.height: 540
-Camera1.distortion_model: radtan
-Camera1.distortion_parameters: [0.0, 0.0, 0.0, 0.0]
+Camera1.distortion_model: equidistant
+Camera1.distortion_parameters: [-0.04314, 0.001, -0.00286, 0.00069]
+Camera1.rectified_intrinsics: [272.0403093936102, 273.56048426697254, 369.85391839518536, 296.9930316232198]
 Camera1.Tbc: !!opencv-matrix
   rows: 4
   cols: 4
@@ -38,14 +45,16 @@ Camera1.Tbc: !!opencv-matrix
          0.0, 0.0, 0.0, 1.0]
 
 # Dataset camera cam3.
-Camera2.fx: 269.85126929867835
-Camera2.fy: 269.0999893903111
-Camera2.cx: 358.4532925294281
-Camera2.cy: 233.40878542863808
+Camera2.topic: "/alphasense_driver_ros/cam3/compressed"
+Camera2.fx: 353.4771977455599
+Camera2.fy: 352.49309892170646
+Camera2.cx: 359.3820102818009
+Camera2.cy: 246.0762257814033
 Camera2.width: 720
 Camera2.height: 540
-Camera2.distortion_model: radtan
-Camera2.distortion_parameters: [0.0, 0.0, 0.0, 0.0]
+Camera2.distortion_model: equidistant
+Camera2.distortion_parameters: [-0.03932015398330179, -0.004740697084133104, 0.0015352229232181549, -0.0004047224742092007]
+Camera2.rectified_intrinsics: [269.85126929867835, 269.0999893903111, 358.4532925294281, 233.40878542863808]
 Camera2.Tbc: !!opencv-matrix
   rows: 4
   cols: 4
@@ -56,14 +65,16 @@ Camera2.Tbc: !!opencv-matrix
          0.0, 0.0, 0.0, 1.0]
 
 # Dataset camera cam4.
-Camera3.fx: 268.00785185103757
-Camera3.fy: 267.53262165819234
-Camera3.cx: 315.95411714854936
-Camera3.cy: 296.6650468713908
+Camera3.topic: "/alphasense_driver_ros/cam4/compressed"
+Camera3.fx: 351.3873118634877
+Camera3.fy: 350.7642336259401
+Camera3.cx: 342.7571148078969
+Camera3.cy: 287.284844843618
 Camera3.width: 720
 Camera3.height: 540
-Camera3.distortion_model: radtan
-Camera3.distortion_parameters: [0.0, 0.0, 0.0, 0.0]
+Camera3.distortion_model: equidistant
+Camera3.distortion_parameters: [-0.03691139827164534, -0.008792737141233907, 0.005972994670065676, -0.0019218526270038702]
+Camera3.rectified_intrinsics: [268.00785185103757, 267.53262165819234, 315.95411714854936, 296.6650468713908]
 Camera3.Tbc: !!opencv-matrix
   rows: 4
   cols: 4

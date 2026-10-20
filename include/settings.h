@@ -147,6 +147,7 @@ class Settings {
     std::vector<GeometricCamera *> vcalibrations_;
     std::vector<DistortionModel> vDistortionModels_;
     std::vector<std::vector<float>> vDistortionParameters_;
+    std::vector<cv::Mat> vRectifiedIntrinsics_;
 
     std::vector<cv::Size> vImSize_;
 

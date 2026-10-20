@@ -168,6 +168,7 @@ void Settings::readCamera(cv::FileStorage &fSettings) {
     vcalibrations_.resize(nCams_);
     vDistortionModels_.resize(nCams_);
     vDistortionParameters_.resize(nCams_);
+    vRectifiedIntrinsics_.resize(nCams_);
     vbNeedToUndistort_.resize(nCams_);
     vTbc_.resize(nCams_);
 
@@ -182,6 +183,32 @@ void Settings::readCamera(cv::FileStorage &fSettings) {
         vector<float> vCalibration = {fx, fy, cx, cy};
 
         vcalibrations_[i] = new Pinhole(vCalibration);
+
+        const cv::FileNode rectified_node =
+            fSettings[cam_name + ".rectified_intrinsics"];
+        if (!rectified_node.empty()) {
+            if (!rectified_node.isSeq() || rectified_node.size() != 4) {
+                throw runtime_error(cam_name +
+                    ".rectified_intrinsics must be [fx, fy, cx, cy]");
+            }
+            vector<float> intrinsics;
+            for (const cv::FileNode &value : rectified_node) {
+                if ((!value.isReal() && !value.isInt()) ||
+                    !std::isfinite(static_cast<float>(value.real()))) {
+                    throw runtime_error(cam_name +
+                        ".rectified_intrinsics must contain finite numbers");
+                }
+                intrinsics.push_back(static_cast<float>(value.real()));
+            }
+            if (intrinsics[0] <= 0 || intrinsics[1] <= 0) {
+                throw runtime_error(cam_name +
+                    ".rectified_intrinsics focal lengths must be positive");
+            }
+            vRectifiedIntrinsics_[i] = (cv::Mat_<float>(3, 3) <<
+                intrinsics[0], 0, intrinsics[2],
+                0, intrinsics[1], intrinsics[3],
+                0, 0, 1);
+        }
 
         const string distortion_model = readParameter<string>(
             fSettings, cam_name + ".distortion_model", found);
@@ -229,7 +256,8 @@ void Settings::readCamera(cv::FileStorage &fSettings) {
         }
 
         vbNeedToUndistort_[i] =
-            vDistortionModels_[i] == DistortionModel::EQUIDISTANT;
+            vDistortionModels_[i] == DistortionModel::EQUIDISTANT ||
+            !vRectifiedIntrinsics_[i].empty();
         if (!vbNeedToUndistort_[i]) {
             for (const float distortion : distortion_parameters) {
                 if (std::abs(distortion) > 1e-8f) {
@@ -577,7 +605,8 @@ void Settings::precomputeRectificationMaps(int cam_id) {
               vDistortionParameters_[cam_id].data());
 
     cv::Mat R = cv::Mat::eye(3, 3, CV_32F);
-    cv::Mat newK = K.clone();
+    cv::Mat newK = vRectifiedIntrinsics_[cam_id].empty()
+        ? K.clone() : vRectifiedIntrinsics_[cam_id].clone();
 
     if (vDistortionModels_[cam_id] == DistortionModel::EQUIDISTANT) {
         cv::fisheye::initUndistortRectifyMap(
