@@ -1,0 +1,18 @@
+[submodule "thirdparty/Sophus"]
+	path = thirdparty/Sophus
+	url = https://github.com/strasdat/Sophus.git
+[submodule "thirdparty/g2o"]
+	path = thirdparty/g2o
+	url = https://github.com/RainerKuemmerle/g2o.git
+[submodule "thirdparty/pangolin"]
+	path = thirdparty/pangolin
+	url = https://github.com/stevenlovegrove/Pangolin.git
+[submodule "thirdparty/SCIP"]
+	path = thirdparty/SCIP
+	url = https://github.com/scipopt/scip.git
+[submodule "thirdparty/SCIPpp"]
+	path = thirdparty/SCIPpp
+	url = https://github.com/scipopt/SCIPpp.git
+[submodule "thirdparty/SoPlex"]
+	path = thirdparty/SoPlex
+	url = https://github.com/scipopt/soplex.git

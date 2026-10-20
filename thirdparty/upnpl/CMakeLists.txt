@@ -1,0 +1,7 @@
+cmake_minimum_required(VERSION 3.24)
+project(UPnPL LANGUAGES CXX)
+find_package(Eigen3 3.3.9 REQUIRED)
+find_package(Ceres 2.2 REQUIRED)
+add_library(UPnPL src/UPnPL.cc)
+target_include_directories(UPnPL PUBLIC include)
+target_link_libraries(UPnPL PUBLIC Eigen3::Eigen Ceres::ceres)

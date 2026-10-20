@@ -1,0 +1,128 @@
+%YAML:1.0
+---
+
+Camera.nCams: 4
+
+Camera0.fx: 272.21046254385396
+Camera0.fy: 273.6225226337552
+Camera0.cx: 357.5346139071073
+Camera0.cy: 255.4255477338687
+Camera0.width: 720
+Camera0.height: 540
+Camera0.distortion_model: radtan
+Camera0.distortion_parameters: [0.0, 0.0, 0.0, 0.0]
+Camera0.Tbc: !!opencv-matrix
+  rows: 4
+  cols: 4
+  dt: f
+  data: [0.003439155075787843, -0.0010054474108259705, 0.9999935806233301, 0.04922168002308409,
+         0.9999759880188566, 0.006019768145553833, -0.0034330419725548712, 0.047236720688958386,
+         -0.006016277759232101, 0.9999813755600538, 0.001026126184214555, -0.009399568563035594,
+         0.0, 0.0, 0.0, 1.0]
+
+Camera1.fx: 272.0403093936102
+Camera1.fy: 273.56048426697254
+Camera1.cx: 369.85391839518536
+Camera1.cy: 296.9930316232198
+Camera1.width: 720
+Camera1.height: 540
+Camera1.distortion_model: radtan
+Camera1.distortion_parameters: [0.0, 0.0, 0.0, 0.0]
+Camera1.Tbc: !!opencv-matrix
+  rows: 4
+  cols: 4
+  dt: f
+  data: [0.010736047977342596, -0.00030381433717233824, 0.9999423208218946, 0.048469798169220306,
+         0.9999382813329954, -0.002855363566493944, -0.010736872157123378, -0.06343414110028579,
+         0.0028584608871679742, 0.9999958772893773, 0.00027314026591376085, -0.009931328151526697,
+         0.0, 0.0, 0.0, 1.0]
+
+# Dataset camera cam3.
+Camera2.fx: 269.85126929867835
+Camera2.fy: 269.0999893903111
+Camera2.cx: 358.4532925294281
+Camera2.cy: 233.40878542863808
+Camera2.width: 720
+Camera2.height: 540
+Camera2.distortion_model: radtan
+Camera2.distortion_parameters: [0.0, 0.0, 0.0, 0.0]
+Camera2.Tbc: !!opencv-matrix
+  rows: 4
+  cols: 4
+  dt: f
+  data: [-0.99997431444656493, 0.0056841252202676747, 0.0043659097108518013, -0.0087409029732989692,
+         0.0043188324083304518, -0.0082683389903436613, 0.99995649018193289, 0.058440155472831136,
+         0.0057199767265040244, 0.99994966137842234, 0.0082435778292664109, -0.0086801579726004437,
+         0.0, 0.0, 0.0, 1.0]
+
+# Dataset camera cam4.
+Camera3.fx: 268.00785185103757
+Camera3.fy: 267.53262165819234
+Camera3.cx: 315.95411714854936
+Camera3.cy: 296.6650468713908
+Camera3.width: 720
+Camera3.height: 540
+Camera3.distortion_model: radtan
+Camera3.distortion_parameters: [0.0, 0.0, 0.0, 0.0]
+Camera3.Tbc: !!opencv-matrix
+  rows: 4
+  cols: 4
+  dt: f
+  data: [0.99996102153032218, 0.0049114203421638386, -0.0073371227505460539, -0.0070045794856908421,
+         -0.0073270037151557813, -0.0020751397262629601, -0.9999710039854528, -0.07162565002980309,
+         -0.0049265034854442764, 0.9999857857716471, -0.002039072845398485, -0.011119423531828562,
+         0.0, 0.0, 0.0, 1.0]
+
+thDepth: 60.0
+fps: 30
+RGB: 0
+
+MultiCamera.point_min_dot: 0.8
+MultiCamera.line_min_dot: 0.8
+MultiCamera.stereo_pairs:
+  - [0, 1]
+  # - [0, 2]
+  # - [1, 3]
+
+XPLNet.onnx: "models/xplnet.onnx"
+XPLNet.verify_onnx: "models/verification_coarse.onnx"
+XPLNet.line_description_onnx: "models/line_description.onnx"
+XPLNet.resize_width: 800
+XPLNet.resize_height: 608
+XPLNet.samples: 32
+XPLNet.max_verify_segments: 130000
+XPLNet.max_ldesc_lines: 1000
+XPLNet.top_k_kp: 500
+XPLNet.kp_th: 0.05
+XPLNet.top_k_junc: 500
+XPLNet.junc_th: 0.05
+XPLNet.line_th: 0.9
+XPLNet.dedup_lines: 1
+XPLNet.dedup_angle_deg: 5.0
+XPLNet.dedup_midpoint_cell: 8.0
+XPLNet.dedup_overlap_ratio: 0.7
+XPLNet.xplnet_build_config.fp16: 0
+XPLNet.xplnet_build_config.int8: 0
+XPLNet.xplnet_build_config.dla_core: -1
+XPLNet.verify_build_config.fp16: 0
+XPLNet.verify_build_config.int8: 0
+XPLNet.verify_build_config.dla_core: -1
+XPLNet.line_description_build_config.fp16: 0
+XPLNet.line_description_build_config.int8: 0
+XPLNet.line_description_build_config.dla_core: -1
+
+loopClosing: 1
+
+Sparsification.Enabled: 0
+Sparsification.N: 500
+Sparsification.Lambda: 500.0
+Sparsification.GridLambda: 10.0
+Sparsification.WindowLength: 30
+Sparsification.NonLocalKF: 15
+Sparsification.MIPGap: 0.002
+Sparsification.SolverThreads: 1
+
+# System.LoadAtlasFromFile: ""
+# System.SaveAtlasToFile: ""
+System.thFarPoints: 60.0
+System.thFarLines: 60.0
