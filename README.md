@@ -4,6 +4,9 @@ XPLSLAM is a multi-camera visual SLAM system using point and line features.
 It combines a TensorRT XPLNet frontend with tracking, local mapping, loop
 closing, and an optional Graphite GPU optimization backend.
 
+The network implementation, pretrained weights, and ONNX exporter are in
+[XPLNet](https://github.com/xiaoli-1664/XPLNet).
+
 ## Dependencies
 
 - Linux, a C++17 compiler, and CMake 3.24 or newer.
@@ -101,8 +104,19 @@ Check bag reading and decoding before loading models or starting SLAM:
 This check does not require a GPU device, models, or vocabularies. Use
 `--python /path/to/python` if `rosbags` is installed in a different environment.
 
-The model weights and vocabularies are not included in this source release.
-Provide these runtime assets separately:
+The network weights are distributed in
+[XPLNet](https://github.com/xiaoli-1664/XPLNet):
+`weights/XPLNetNew_160000.pth` and `weights/LDesc_160000.pth`.
+From an XPLNet checkout, export the three ONNX models for this configuration:
+
+```bash
+python -m pip install -r requirements-onnx.txt
+python tools/export_xpl_onnx.py \
+  --height 608 --width 800 \
+  --output-dir /path/to/XPLSLAM/models
+```
+
+Provide the two DBoW3 vocabularies separately. The complete runtime layout is:
 
 ```text
 models/xplnet.onnx
