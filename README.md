@@ -106,7 +106,7 @@ This check does not require a GPU device, models, or vocabularies. Use
 
 The network weights are distributed in
 [XPLNet](https://github.com/xiaoli-1664/XPLNet):
-`weights/XPLNetNew_160000.pth` and `weights/LDesc_160000.pth`.
+`weights/xplnet.pth` and `weights/ldesc.pth`.
 From an XPLNet checkout, export the three ONNX models for this configuration:
 
 ```bash
